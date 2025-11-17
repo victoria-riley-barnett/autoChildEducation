@@ -38,18 +38,28 @@ select_best_child_education_trait_based = {
 		}
 	}
 	# Check for specific multi-stat traits and assign their best education
+	# Only applies to children who don't have education yet (first assignment)
 	else_if = {
-		limit = { has_trait = child_ambitious }
+		limit = { 
+			has_trait = child_ambitious
+			has_child_education_selected = no
+		}
 		# Ambitious: +0.33 adm, +0.3 dip -> administrative focus
 		set_child_education = child_education:administrative_education
 	}
 	else_if = {
-		limit = { has_trait = child_gallant }
+		limit = { 
+			has_trait = child_gallant
+			has_child_education_selected = no
+		}
 		# Gallant: +0.33 dip, +0.33 mil -> military focus (warrior diplomat)
 		set_child_education = child_education:military_education
 	}
 	else_if = {
-		limit = { has_trait = child_shrewd }
+		limit = { 
+			has_trait = child_shrewd
+			has_child_education_selected = no
+		}
 		# Shrewd: +0.33 mil, +0.33 adm -> diplomatic focus (cunning strategist)
 		set_child_education = child_education:diplomatic_education
 	}
@@ -66,45 +76,46 @@ select_best_child_education_trait_based = {
 			select_best_education_field = yes
 		}
 		# For children already educated, check if they have traits that don't match current education
+		# Switch them directly to the trait's preferred education
 		else_if = {
 			limit = { has_child_education = administrative_education }
 			if = {
-				limit = {
-					OR = {
-						# Single-stat traits that don't match
-						has_trait = child_gregarious  # +0.5 dip
-						has_trait = child_rowdy       # +0.5 mil
-						# Dual-stat traits that include non-admin
-						has_trait = child_gallant     # +0.33 dip/mil
-					}
-				}
-				select_best_education_field = yes
+				limit = { has_trait = child_gregarious }  # +0.5 dip → switch to dip
+				set_child_education = child_education:diplomatic_education
+			}
+			else_if = {
+				limit = { has_trait = child_rowdy }  # +0.5 mil → switch to mil
+				set_child_education = child_education:military_education
+			}
+			else_if = {
+				limit = { has_trait = child_gallant }  # +0.33 dip/mil → switch to mil
+				set_child_education = child_education:military_education
 			}
 		}
 		else_if = {
 			limit = { has_child_education = diplomatic_education }
 			if = {
-				limit = {
-					OR = {
-						has_trait = child_intelligent # +0.5 adm
-						has_trait = child_rowdy       # +0.5 mil
-						has_trait = child_shrewd      # +0.33 adm/mil
-					}
-				}
-				select_best_education_field = yes
+				limit = { has_trait = child_intelligent }  # +0.5 adm → switch to adm
+				set_child_education = child_education:administrative_education
+			}
+			else_if = {
+				limit = { has_trait = child_rowdy }  # +0.5 mil → switch to mil
+				set_child_education = child_education:military_education
 			}
 		}
 		else_if = {
 			limit = { has_child_education = military_education }
 			if = {
-				limit = {
-					OR = {
-						has_trait = child_intelligent # +0.5 adm
-						has_trait = child_gregarious  # +0.5 dip
-						has_trait = child_ambitious   # +0.33 adm/dip
-					}
-				}
-				select_best_education_field = yes
+				limit = { has_trait = child_intelligent }  # +0.5 adm → switch to adm
+				set_child_education = child_education:administrative_education
+			}
+			else_if = {
+				limit = { has_trait = child_gregarious }  # +0.5 dip → switch to dip
+				set_child_education = child_education:diplomatic_education
+			}
+			else_if = {
+				limit = { has_trait = child_ambitious }  # +0.33 adm/dip → switch to adm
+				set_child_education = child_education:administrative_education
 			}
 		}
 	}
@@ -215,45 +226,6 @@ select_best_education_field = {
 				modifier = {
 					factor = 2
 					modifier:character_mil_child_education >= 0.4
-				}
-				set_child_education = child_education:military_education
-			}
-		}
-	}
-	# Reassignment - pick based on highest current aptitude
-	else = {
-		# At this point, the calling code has already verified that switching makes sense
-		random_list = {
-			10 = {
-				modifier = {
-					add = modifier:character_adm_child_education
-					multiply = 10
-				}
-				trigger = {
-					modifier:character_adm_child_education >= modifier:character_dip_child_education
-					modifier:character_adm_child_education >= modifier:character_mil_child_education
-				}
-				set_child_education = child_education:administrative_education
-			}
-			10 = {
-				modifier = {
-					add = modifier:character_dip_child_education
-					multiply = 10
-				}
-				trigger = {
-					modifier:character_dip_child_education >= modifier:character_adm_child_education
-					modifier:character_dip_child_education >= modifier:character_mil_child_education
-				}
-				set_child_education = child_education:diplomatic_education
-			}
-			10 = {
-				modifier = {
-					add = modifier:character_mil_child_education
-					multiply = 10
-				}
-				trigger = {
-					modifier:character_mil_child_education >= modifier:character_dip_child_education
-					modifier:character_mil_child_education >= modifier:character_adm_child_education
 				}
 				set_child_education = child_education:military_education
 			}
