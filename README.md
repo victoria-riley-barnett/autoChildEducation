@@ -11,7 +11,7 @@ Automatically assigns optimal education to all children in your country. No conf
 - Diplomatic education + child_intelligent/rowdy/shrewd → switches  
 - Military education + child_intelligent/gregarious/ambitious → switches
 
-**Expensive Education** (250 gold): Heirs (1000g), crown estate children (2000g), and high-aptitude children (3000g) get expensive education if you can afford it.
+**Expensive Education**: Heirs (1000g), crown estate children (2000g), and high-aptitude children (3000g) get expensive education if you can afford it.
 
 **Hardcoded Traits**: Multi-stat traits bypass the normal system:
 - child_ambitious → Administrative
