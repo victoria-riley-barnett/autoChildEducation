@@ -14,7 +14,7 @@ Examples:
 - Ambitious child (base adm +0.33, dip +0.3) → Administrative education (0.33 > 0.30)
 - Gallant child (base dip +0.33, mil +0.33) → Diplomatic education (tie-breaker)
 - Shrewd child (base mil +0.33, adm +0.33) → Military education (tie-breaker)
-- Prodigy child (base all +1.5) → Cycles through all three types for even distribution
+- Prodigy, slow, idiot child (base all +1.5, -0.3, etc) → Goes to the general counter (admin, then diplo, then mil, repeat..)
 
 **Expensive Education**: 
 
