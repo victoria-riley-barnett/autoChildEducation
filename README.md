@@ -22,4 +22,4 @@ Automatically assigns optimal education to all children in your country. No conf
 
 Cabinet value comes from **specialists** (98/82/10) not generalists (80/70/70). Education gives +0.75 to one stat, so matching it to natural trait bonuses (+0.5) creates better cabinet members.
 
-The 3-month recheck catches trait changes (children get traits early in life) while avoiding excessive reassignment thrashing.
+The 3-month recheck catches trait changes (children get traits early in life) while avoiding excessive reassignment.
