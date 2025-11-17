@@ -7,37 +7,19 @@ monthly_country_pulse = {
 }
 
 # Our actual logic as a separate on_action
-# root = country
 auto_child_education_monthly_check = {
 	effect = {
 		# Only run for human players (AI doesn't need this)
 		if = {
 			limit = { is_ai = no }
-			# Check children - assign immediately, recheck every 3 months
+			# Check all children monthly - first assignment + trait-based reassignment
 			every_character = {
 				limit = {
 					has_trait_category = child
 					# Skip if player manually locked this child's education
 					NOT = { has_variable = ace_player_locked }
-					OR = {
-						# No education yet - assign immediately
-						has_child_education_selected = no
-						# Has education but due for recheck (every 3 months)
-						AND = {
-							has_child_education_selected = yes
-							NOT = { has_variable = ace_last_check }
-						}
-					}
 				}
-				# Mark as checked (3 month cooldown)
-				if = {
-					limit = { has_child_education_selected = yes }
-					set_variable = {
-						name = ace_last_check
-						months = 3
-					}
-				}
-				# Apply/update education based on current aptitudes
+				# Apply/update education based on current traits and aptitudes
 				select_best_child_education_trait_based = yes
 			}
 		}
