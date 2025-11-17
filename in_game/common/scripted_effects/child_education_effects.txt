@@ -1,6 +1,5 @@
-﻿# Select best education based on child's education modifiers (like the workshop mod does)
+﻿# Select best education based on child's education modifiers
 select_best_child_education_trait_based = {
-	# NEVER change expensive education once set - it's permanent!
 	if = {
 		limit = { has_child_education = expensive_in_depth_education }
 		# Do nothing - keep expensive education forever
