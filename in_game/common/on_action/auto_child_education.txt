@@ -1,4 +1,4 @@
-# Auto Child Education - Hook into monthly country pulse with a delay
+﻿# Auto Child Education - Hook into monthly country pulse with a delay
 monthly_country_pulse = {
 	on_actions = {
 		delay = { days = 1 }
@@ -16,6 +16,8 @@ auto_child_education_monthly_check = {
 			every_character = {
 				limit = {
 					has_trait_category = child
+					# Skip if already has expensive education (never change it!)
+					NOT = { has_child_education = expensive_in_depth_education }
 					# Skip if player manually locked this child's education
 					NOT = { has_variable = ace_player_locked }
 				}
