@@ -9,8 +9,7 @@ select_best_child_education_trait_based = {
 	# Only runs once per child - skips if already has expensive education OR already paid
 	else_if = {
 		limit = {
-			# And we haven't already paid for this child
-			NOT = { has_variable = ace_expensive_education_paid }
+			is_female = no
 			owner = {
 				can_pay_price = price:select_expensive_child_education
 				# Only spend if we have at least 1000 gold (4x the education cost)
@@ -37,7 +36,6 @@ select_best_child_education_trait_based = {
 		owner = {
 			pay_price = price:select_expensive_child_education
 		}
-		set_variable = { name = ace_expensive_education_paid value = yes }
 	}
 	# All other children: always pick the best education based on their current modifiers
 	else = {
