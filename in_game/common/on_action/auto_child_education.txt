@@ -9,17 +9,15 @@ monthly_country_pulse = {
 # Our actual logic as a separate on_action
 auto_child_education_monthly_check = {
 	effect = {
-		# Only run for human players (AI doesn't need this)
+		# Only run for human players
 		if = {
 			limit = { is_ai = no }
-			# Check all children monthly - first assignment + trait-based reassignment
+			# Check all children monthly
 			every_character = {
 				limit = {
 					has_trait_category = child
-					# Skip if already has expensive education (never change it!)
+					# Skip if already has expensive education
 					NOT = { has_child_education = expensive_in_depth_education }
-					# Skip if player manually locked this child's education
-					NOT = { has_variable = ace_player_locked }
 				}
 				# Apply/update education based on current traits and aptitudes
 				select_best_child_education_trait_based = yes

@@ -1,7 +1,7 @@
 ﻿{
 	"name":	"Auto Child Education",
 	"id":	"autoce.mymod",
-	"version":	"1.0.7",
+	"version":	"1.12",
 	"supported_game_version":	"1.0.*",
 	"short_description":	"Automatically selects the best education for children based on their aptitudes.",
 	"tags":	["Gameplay", "Utilities"],

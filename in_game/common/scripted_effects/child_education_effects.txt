@@ -1,24 +1,41 @@
-﻿# Select best education based on child's education modifiers
+﻿# Helper: compute base_adm/base_dip/base_mil by removing current education bonus
+ace_compute_base_modifiers = {
+	if = {
+		limit = { has_child_education = administrative_education }
+		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.75 } }
+		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
+		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
+	}
+	else_if = {
+		limit = { has_child_education = diplomatic_education }
+		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
+		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.75 } }
+		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
+	}
+	else_if = {
+		limit = { has_child_education = military_education }
+		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
+		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
+		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.75 } }
+	}
+	else_if = {
+		limit = { has_child_education = balanced_education }
+		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.5 } }
+		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.5 } }
+		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.5 } }
+	}
+	else = {
+		save_temporary_scope_value_as = { name = base_adm value = scope:curr_adm }
+		save_temporary_scope_value_as = { name = base_dip value = scope:curr_dip }
+		save_temporary_scope_value_as = { name = base_mil value = scope:curr_mil }
+	}
+}
+
+# Select best education based on child's education modifiers
 select_best_child_education_trait_based = {
 	if = {
 		limit = { has_child_education = expensive_in_depth_education }
 		# Do nothing - keep expensive education forever
-	}
-	else_if = {
-		limit = {
-			# Only for male children 
-			is_female = no
-			# Only heir
-			is_heir_of = owner
-			owner = {
-				can_pay_price = price:select_expensive_child_education
-				gold >= 1000
-			}
-		}
-		set_child_education = child_education:expensive_in_depth_education
-		owner = {
-			pay_price = price:select_expensive_child_education
-		}
 	}
 	else = {
 		# Save current modifiers
@@ -35,32 +52,35 @@ select_best_child_education_trait_based = {
 			value = modifier:character_mil_child_education
 		}
 		
-		# Compute base modifiers
-		# Helper: compute base_adm/base_dip/base_mil by removing current education bonus
-		ace_compute_base_modifiers = {
-			if = {
-				limit = { has_child_education = administrative_education }
-				save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.75 } }
-				save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
-				save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
-			}
-			else_if = {
-				limit = { has_child_education = diplomatic_education }
-				save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
-				save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.75 } }
-				save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
-			}
-			else_if = {
-				limit = { has_child_education = military_education }
-				save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
-				save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
-				save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.75 } }
-			}
-			else = {
-				save_temporary_scope_value_as = { name = base_adm value = scope:curr_adm }
-				save_temporary_scope_value_as = { name = base_dip value = scope:curr_dip }
-				save_temporary_scope_value_as = { name = base_mil value = scope:curr_mil }
-			}
+		# Compute base modifiers by removing current education bonuses
+		if = {
+			limit = { has_child_education = administrative_education }
+			save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.75 } }
+			save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
+			save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
+		}
+		else_if = {
+			limit = { has_child_education = diplomatic_education }
+			save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
+			save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.75 } }
+			save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
+		}
+		else_if = {
+			limit = { has_child_education = military_education }
+			save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
+			save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
+			save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.75 } }
+		}
+		else_if = {
+			limit = { has_child_education = balanced_education }
+			save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.5 } }
+			save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.5 } }
+			save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.5 } }
+		}
+		else = {
+			save_temporary_scope_value_as = { name = base_adm value = scope:curr_adm }
+			save_temporary_scope_value_as = { name = base_dip value = scope:curr_dip }
+			save_temporary_scope_value_as = { name = base_mil value = scope:curr_mil }
 		}
 		
 		# 1. Specialists
@@ -85,281 +105,74 @@ select_best_child_education_trait_based = {
 			}
 			set_child_education = child_education:military_education
 		}
-		# 2. Dual stats
+		# 2. Dual stats (ambitious, shrewd, gallant)
 		else_if = {
 			limit = {
-				scope:base_dip >= scope:base_mil
-				scope:base_mil >= scope:base_dip
-				scope:base_dip > scope:base_adm
-			}
-			set_child_education = child_education:diplomatic_education
-		}
-		else_if = {
-			limit = {
-				scope:base_mil >= scope:base_adm
-				scope:base_adm >= scope:base_mil
-				scope:base_mil > scope:base_dip
-			}
-			set_child_education = child_education:military_education
-		}
-		else_if = {
-			limit = {
-				scope:base_adm == scope:base_dip
+				#Ambitious - 0.33 adm + 0.33 dip
 				scope:base_adm > scope:base_mil
+				scope:base_dip > scope:base_mil
+				scope:base_adm = scope:base_dip
 			}
 			set_child_education = child_education:diplomatic_education
 		}
 		else_if = {
 			limit = {
-				scope:base_adm == scope:base_mil
+				#Shrewd - 0.33 adm + 0.33 mil
 				scope:base_adm > scope:base_dip
+				scope:base_mil > scope:base_dip
+				scope:base_adm = scope:base_mil
 			}
 			set_child_education = child_education:military_education
+		}
+		else_if = {
+			limit = {
+				#Gallant - 0.33 dip + 0.33 mil
+				scope:base_dip > scope:base_adm
+				scope:base_mil > scope:base_adm
+				scope:base_dip = scope:base_mil
+			}
+			set_child_education = child_education:administrative_education
 		}
 		# 3. Generalists
 		else = {
-			# All three equal → rotate evenly ADM → DIP → MIL
-			owner = {
-				if = { limit = { NOT = { has_variable = ace_generalist_counter } } set_variable = { name = ace_generalist_counter value = 0 } }
-				change_variable = { name = ace_generalist_counter add = 1 }
-				# After 3 \\ wrap back to 0 so stored values are 1,2,0
-				if = { limit = { check_variable = { name = ace_generalist_counter value = 3 } } set_variable = { name = ace_generalist_counter value = 0 } }
-			}
-			if = {
-				limit = { owner = { check_variable = { name = ace_generalist_counter value = 1 } } }
-				set_child_education = child_education:administrative_education
-			}
-			else_if = {
-				limit = { owner = { check_variable = { name = ace_generalist_counter value = 2 } } }
-				set_child_education = child_education:diplomatic_education
-			}
-			else = {
-				# Remaining case (counter = 0 after wrap)
-				set_child_education = child_education:military_education
-			}
-		}
-	}
-}
-# Select best education based on child's education modifiers
-select_best_child_education_trait_based = {
-	if = {
-		limit = { has_child_education = expensive_in_depth_education }
-		# Do nothing - keep expensive education forever
-	}
-	# First, check if we should try expensive education for special children
-	# (heirs, crown estate, high aptitude)
-	# Only runs once per child - skips if already has expensive education OR already paid
-	else_if = {
-		limit = {
-			# Only for male children 
-			is_female = no
-			# Only heir
-			is_heir_of = owner
-			owner = {
-				can_pay_price = price:select_expensive_child_education
-				gold >= 1000
-			}
-		}
-		set_child_education = child_education:expensive_in_depth_education
-		owner = {
-			pay_price = price:select_expensive_child_education
-		}
-	}
-	# All other children: always pick the best education based on their current modifiers
-	else = {
-		# Save current modifiers
-		save_temporary_scope_value_as = {
-			name = curr_adm
-			value = modifier:character_adm_child_education
-		}
-		save_temporary_scope_value_as = {
-			name = curr_dip
-			value = modifier:character_dip_child_education
-		}
-		save_temporary_scope_value_as = {
-			name = curr_mil
-			value = modifier:character_mil_child_education
-		}
-		
-		# If they have specialized education, calculate base modifiers by removing education bonuses
-		# Otherwise base = current (no education bonuses to remove)
-		if = {
-			limit = { has_child_education = administrative_education }
-			save_temporary_scope_value_as = {
-				name = base_adm
-				value = {
-					value = scope:curr_adm
-					subtract = 0.75
-				}
-			}
-			save_temporary_scope_value_as = {
-				name = base_dip
-				value = {
-					value = scope:curr_dip
-					subtract = 0.25
-				}
-			}
-			save_temporary_scope_value_as = {
-				name = base_mil
-				value = {
-					value = scope:curr_mil
-					subtract = 0.25
-				}
-			}
-		}
-		else_if = {
-			limit = { has_child_education = diplomatic_education }
-			save_temporary_scope_value_as = {
-				name = base_adm
-				value = {
-					value = scope:curr_adm
-					subtract = 0.25
-				}
-			}
-			save_temporary_scope_value_as = {
-				name = base_dip
-				value = {
-					value = scope:curr_dip
-					subtract = 0.75
-				}
-			}
-			save_temporary_scope_value_as = {
-				name = base_mil
-				value = {
-					value = scope:curr_mil
-					subtract = 0.25
-				}
-			}
-		}
-		else_if = {
-			limit = { has_child_education = military_education }
-			save_temporary_scope_value_as = {
-				name = base_adm
-				value = {
-					value = scope:curr_adm
-					subtract = 0.25
-				}
-			}
-			save_temporary_scope_value_as = {
-				name = base_dip
-				value = {
-					value = scope:curr_dip
-					subtract = 0.25
-				}
-			}
-			save_temporary_scope_value_as = {
-				name = base_mil
-				value = {
-					value = scope:curr_mil
-					subtract = 0.75
-				}
-			}
-		}
-		else = {
-			# No education or balanced education - use current modifiers as base
-			save_temporary_scope_value_as = {
-				name = base_adm
-				value = scope:curr_adm
-			}
-			save_temporary_scope_value_as = {
-				name = base_dip
-				value = scope:curr_dip
-			}
-			save_temporary_scope_value_as = {
-				name = base_mil
-				value = scope:curr_mil
-			}
-		}
-		
-		# Now pick the education matching the highest base modifier
-		# Detect dual-stat tie patterns first (Gallant/Shrewd), then use >= waterfall
-		if = {
-			limit = {
-				scope:base_dip >= scope:base_mil
-				scope:base_mil >= scope:base_dip
-				scope:base_dip > scope:base_adm
-			}
-			# Gallant: dip = mil and both > adm → diplomatic
-			set_child_education = child_education:diplomatic_education
-		}
-		else_if = {
-			limit = {
-				scope:base_mil >= scope:base_adm
-				scope:base_adm >= scope:base_mil
-				scope:base_mil > scope:base_dip
-			}
-			# Shrewd: mil = adm and both > dip → military
-			set_child_education = child_education:military_education
-		}
-		else_if = {
-			limit = {
-				scope:base_adm >= scope:base_dip
-				scope:base_dip >= scope:base_adm
-				scope:base_adm >= scope:base_mil
-				scope:base_mil >= scope:base_adm
-			}
-			# All three equal (prodigy, gifted, slow, idiot) → distribute evenly
-			# Use modulo on country variable to cycle through education types
-			owner = {
-				if = {
-					limit = { NOT = { has_variable = ace_generalist_counter } }
-					set_variable = { name = ace_generalist_counter value = 0 }
-				}
-				change_variable = { name = ace_generalist_counter add = 1 }
-			}
 			if = {
 				limit = {
-					owner = {
-						OR = {
-							check_variable = { name = ace_generalist_counter value = 1 }
-							check_variable = { name = ace_generalist_counter value = 4 }
-							check_variable = { name = ace_generalist_counter value = 7 }
-						}
-					}
+					scope:base_adm = scope:base_dip
+					scope:base_adm = scope:base_mil
 				}
-				set_child_education = child_education:administrative_education
-			}
-			else_if = {
-				limit = {
-					owner = {
-						OR = {
-							check_variable = { name = ace_generalist_counter value = 2 }
-							check_variable = { name = ace_generalist_counter value = 5 }
-							check_variable = { name = ace_generalist_counter value = 8 }
-						}
-					}
-				}
-				set_child_education = child_education:diplomatic_education
-			}
-			else = {
-				set_child_education = child_education:military_education
-				# Reset counter after 9 to keep it small
+				# All three equal → rotate evenly ADM → DIP → MIL (counter cycles: 0 → 1 → 2 → 0)
 				owner = {
-					if = {
-						limit = { check_variable = { name = ace_generalist_counter value = 9 } }
-						set_variable = { name = ace_generalist_counter value = 0 }
+					# Initialize counter to 0 if it doesn't exist
+					if = { 
+						limit = { NOT = { has_variable = ace_generalist_counter } } 
+						set_variable = { name = ace_generalist_counter value = 0 } 
+					}
+				}
+				
+				# Assign education based on counter value (0, 1, or 2)
+				if = {
+					limit = { owner = { check_variable = { name = ace_generalist_counter value = 0 } } }
+					set_child_education = child_education:administrative_education
+				}
+				else_if = {
+					limit = { owner = { check_variable = { name = ace_generalist_counter value = 1 } } }
+					set_child_education = child_education:diplomatic_education
+				}
+				else_if = {
+					limit = { owner = { check_variable = { name = ace_generalist_counter value = 2 } } }
+					set_child_education = child_education:military_education
+				}
+				
+				# Increment counter after assignment and wrap from 2 back to 0
+				owner = {
+					change_variable = { name = ace_generalist_counter add = 1 }
+					if = { 
+						limit = { check_variable = { name = ace_generalist_counter value = 3 } } 
+						set_variable = { name = ace_generalist_counter value = 0 } 
 					}
 				}
 			}
 		}
-		else_if = {
-			limit = {
-				scope:base_adm >= scope:base_dip
-				scope:base_adm >= scope:base_mil
-			}
-			# Ambitious (adm > dip) or adm clearly highest → administrative
-			set_child_education = child_education:administrative_education
-		}
-		else_if = {
-			limit = {
-				scope:base_dip >= scope:base_mil
-			}
-			# Dip clearly highest → diplomatic
-			set_child_education = child_education:diplomatic_education
-		}
-		else = {
-			# Mil clearly highest → military
-			set_child_education = child_education:military_education
-		}
 	}
 }
+
