@@ -51,7 +51,7 @@ select_best_child_education_trait_based = {
 		}
 		
 		# 1. Specialists
-		# Crown estate simplification: direct children of ruler only ever become ADM unless they are clear .5 specialists
+		# Crown estate simplification: direct children of heir only ever become ADM
 		if = {
 			#Child of heir
 			limit = { is_child_of = owner.heir }
