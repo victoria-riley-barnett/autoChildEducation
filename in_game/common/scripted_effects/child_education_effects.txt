@@ -1,37 +1,4 @@
-﻿# Helper: compute base_adm/base_dip/base_mil by removing current education bonus
-ace_compute_base_modifiers = {
-	if = {
-		limit = { has_child_education = administrative_education }
-		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.75 } }
-		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
-		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
-	}
-	else_if = {
-		limit = { has_child_education = diplomatic_education }
-		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
-		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.75 } }
-		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.25 } }
-	}
-	else_if = {
-		limit = { has_child_education = military_education }
-		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.25 } }
-		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.25 } }
-		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.75 } }
-	}
-	else_if = {
-		limit = { has_child_education = balanced_education }
-		save_temporary_scope_value_as = { name = base_adm value = { value = scope:curr_adm subtract = 0.5 } }
-		save_temporary_scope_value_as = { name = base_dip value = { value = scope:curr_dip subtract = 0.5 } }
-		save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.5 } }
-	}
-	else = {
-		save_temporary_scope_value_as = { name = base_adm value = scope:curr_adm }
-		save_temporary_scope_value_as = { name = base_dip value = scope:curr_dip }
-		save_temporary_scope_value_as = { name = base_mil value = scope:curr_mil }
-	}
-}
-
-# Select best education based on child's education modifiers
+﻿# Select best education based on child's education modifiers
 select_best_child_education_trait_based = {
 	if = {
 		limit = { has_child_education = expensive_in_depth_education }
@@ -84,7 +51,13 @@ select_best_child_education_trait_based = {
 		}
 		
 		# 1. Specialists
+		# Crown estate simplification: direct children of ruler only ever become ADM unless they are clear .5 specialists
 		if = {
+			#Child of heir
+			limit = { is_child_of = owner.heir }
+			set_child_education = child_education:administrative_education
+		}
+		else_if = {
 			limit = {
 				scope:base_adm > scope:base_dip
 				scope:base_adm > scope:base_mil
@@ -113,7 +86,8 @@ select_best_child_education_trait_based = {
 				scope:base_dip > scope:base_mil
 				scope:base_adm = scope:base_dip
 			}
-			set_child_education = child_education:diplomatic_education
+			# Tie between ADM & DIP → choose Administrative (unique mapping per dual-stat trait)
+			set_child_education = child_education:administrative_education
 		}
 		else_if = {
 			limit = {
@@ -131,7 +105,8 @@ select_best_child_education_trait_based = {
 				scope:base_mil > scope:base_adm
 				scope:base_dip = scope:base_mil
 			}
-			set_child_education = child_education:administrative_education
+			# Tie between DIP & MIL → choose Diplomatic (unique mapping per dual-stat trait)
+			set_child_education = child_education:diplomatic_education
 		}
 		# 3. Generalists
 		else = {

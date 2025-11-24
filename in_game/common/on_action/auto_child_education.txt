@@ -16,6 +16,8 @@ auto_child_education_monthly_check = {
 			every_character = {
 				limit = {
 					has_trait_category = child
+					# Skip heirs entirely so player can manage heir education manually
+					NOT = { is_heir = yes  }
 					# Skip if already has expensive education
 					NOT = { has_child_education = expensive_in_depth_education }
 				}
