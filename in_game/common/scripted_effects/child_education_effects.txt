@@ -1,8 +1,13 @@
-﻿# Select best education based on child's education modifiers
+﻿# Auto Child Education - Select best education based on child's modifiers
+# Version 2.0 - Rewritten for EU5 1.0.9+ compatibility
+
+# Main effect: assigns the optimal education based on the child's stat modifiers
+# Skips prodigy/gifted (they cap stats regardless), heirs (player should manage), 
+# and expensive education (never downgrade)
 select_best_child_education_trait_based = {
+	# NEVER change expensive education once set
 	if = {
 		limit = { has_child_education = expensive_in_depth_education }
-		# Do nothing - keep expensive education forever
 	}
 	else = {
 		# Save current modifiers
@@ -45,25 +50,24 @@ select_best_child_education_trait_based = {
 			save_temporary_scope_value_as = { name = base_mil value = { value = scope:curr_mil subtract = 0.5 } }
 		}
 		else = {
+			# No education yet, use raw modifiers
 			save_temporary_scope_value_as = { name = base_adm value = scope:curr_adm }
 			save_temporary_scope_value_as = { name = base_dip value = scope:curr_dip }
 			save_temporary_scope_value_as = { name = base_mil value = scope:curr_mil }
 		}
 		
-		# 1. Specialists
-		# Crown estate simplification: direct children of heir only ever become ADM
+		# Select education based on highest base modifier
+		# Priority: ADM > DIP > MIL for ties
+		
+		# 1. Clear ADM specialist
 		if = {
-			#Child of heir
-			limit = { is_child_of = owner.heir }
-			set_child_education = child_education:administrative_education
-		}
-		else_if = {
 			limit = {
 				scope:base_adm > scope:base_dip
 				scope:base_adm > scope:base_mil
 			}
 			set_child_education = child_education:administrative_education
 		}
+		# 2. Clear DIP specialist  
 		else_if = {
 			limit = {
 				scope:base_dip > scope:base_adm
@@ -71,6 +75,7 @@ select_best_child_education_trait_based = {
 			}
 			set_child_education = child_education:diplomatic_education
 		}
+		# 3. Clear MIL specialist
 		else_if = {
 			limit = {
 				scope:base_mil > scope:base_adm
@@ -78,73 +83,68 @@ select_best_child_education_trait_based = {
 			}
 			set_child_education = child_education:military_education
 		}
-		# 2. Dual stats (ambitious, shrewd, gallant)
+		# 4. ADM-DIP tie (Ambitious trait: +0.33 adm, +0.33 dip)
 		else_if = {
 			limit = {
-				#Ambitious - 0.33 adm + 0.33 dip
+				scope:base_adm >= scope:base_dip
 				scope:base_adm > scope:base_mil
-				scope:base_dip > scope:base_mil
-				scope:base_adm = scope:base_dip
 			}
-			# Tie between ADM & DIP → choose Administrative (unique mapping per dual-stat trait)
 			set_child_education = child_education:administrative_education
 		}
+		# 5. ADM-MIL tie (Shrewd trait: +0.33 adm, +0.33 mil)
 		else_if = {
 			limit = {
-				#Shrewd - 0.33 adm + 0.33 mil
+				scope:base_adm >= scope:base_mil
 				scope:base_adm > scope:base_dip
-				scope:base_mil > scope:base_dip
-				scope:base_adm = scope:base_mil
 			}
-			set_child_education = child_education:military_education
+			set_child_education = child_education:administrative_education
 		}
+		# 6. DIP-MIL tie (Gallant trait: +0.33 dip, +0.33 mil)
 		else_if = {
 			limit = {
-				#Gallant - 0.33 dip + 0.33 mil
+				scope:base_dip >= scope:base_mil
 				scope:base_dip > scope:base_adm
-				scope:base_mil > scope:base_adm
-				scope:base_dip = scope:base_mil
 			}
-			# Tie between DIP & MIL → choose Diplomatic (unique mapping per dual-stat trait)
 			set_child_education = child_education:diplomatic_education
 		}
-		# 3. Generalists
+		# 7. All equal (Prodigy/Gifted/Slow/Idiot or no traits) - rotate
 		else = {
+			# Initialize counter if needed
+			owner = {
+				if = { 
+					limit = { NOT = { has_variable = ace_generalist_counter } } 
+					set_variable = { name = ace_generalist_counter value = 0 } 
+				}
+			}
+			
+			# Assign based on counter (0=ADM, 1=DIP, 2=MIL)
 			if = {
-				limit = {
-					scope:base_adm = scope:base_dip
-					scope:base_adm = scope:base_mil
+				limit = { 
+					owner = { 
+						var:ace_generalist_counter < 1
+					} 
 				}
-				# All three equal → rotate evenly ADM → DIP → MIL (counter cycles: 0 → 1 → 2 → 0)
-				owner = {
-					# Initialize counter to 0 if it doesn't exist
-					if = { 
-						limit = { NOT = { has_variable = ace_generalist_counter } } 
-						set_variable = { name = ace_generalist_counter value = 0 } 
-					}
+				set_child_education = child_education:administrative_education
+			}
+			else_if = {
+				limit = { 
+					owner = { 
+						var:ace_generalist_counter >= 1
+						var:ace_generalist_counter < 2
+					} 
 				}
-				
-				# Assign education based on counter value (0, 1, or 2)
-				if = {
-					limit = { owner = { check_variable = { name = ace_generalist_counter value = 0 } } }
-					set_child_education = child_education:administrative_education
-				}
-				else_if = {
-					limit = { owner = { check_variable = { name = ace_generalist_counter value = 1 } } }
-					set_child_education = child_education:diplomatic_education
-				}
-				else_if = {
-					limit = { owner = { check_variable = { name = ace_generalist_counter value = 2 } } }
-					set_child_education = child_education:military_education
-				}
-				
-				# Increment counter after assignment and wrap from 2 back to 0
-				owner = {
-					change_variable = { name = ace_generalist_counter add = 1 }
-					if = { 
-						limit = { check_variable = { name = ace_generalist_counter value = 3 } } 
-						set_variable = { name = ace_generalist_counter value = 0 } 
-					}
+				set_child_education = child_education:diplomatic_education
+			}
+			else = {
+				set_child_education = child_education:military_education
+			}
+			
+			# Increment and wrap counter
+			owner = {
+				change_variable = { name = ace_generalist_counter add = 1 }
+				if = { 
+					limit = { var:ace_generalist_counter >= 3 } 
+					set_variable = { name = ace_generalist_counter value = 0 } 
 				}
 			}
 		}

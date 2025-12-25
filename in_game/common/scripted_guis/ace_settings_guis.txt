@@ -1,0 +1,99 @@
+﻿# Auto Child Education - Scripted GUIs for settings toggles
+
+# Toggle: Skip heir children
+ace_toggle_skip_heirs = {
+	scope = country
+	
+	effect = {
+		if = {
+			limit = { has_variable = ace_skip_heirs }
+			remove_variable = ace_skip_heirs
+		}
+		else = {
+			set_variable = ace_skip_heirs
+		}
+	}
+}
+
+# Toggle: Skip crown estate children
+ace_toggle_skip_crown = {
+	scope = country
+	
+	effect = {
+		if = {
+			limit = { has_variable = ace_skip_crown }
+			remove_variable = ace_skip_crown
+		}
+		else = {
+			set_variable = ace_skip_crown
+		}
+	}
+}
+
+# Toggle: Skip prodigy/gifted children (they hit 100/100/100 regardless)
+ace_toggle_skip_prodigy = {
+	scope = country
+	
+	effect = {
+		if = {
+			limit = { has_variable = ace_skip_prodigy }
+			remove_variable = ace_skip_prodigy
+		}
+		else = {
+			set_variable = ace_skip_prodigy
+		}
+	}
+}
+
+# Run Now: Immediately process all eligible children and log results
+ace_run_now = {
+	scope = country
+	
+	effect = {
+		# Reset counter for this run
+		set_variable = { name = ace_run_count value = 0 }
+		
+		# Log start
+		log = "[ACE] Running Auto Child Education for [This.GetName]..."
+		
+		# Process via every_character
+		every_character = {
+			limit = {
+				ace_should_auto_educate_child = yes
+			}
+			log = "[ACE] Processing [This.GetName] - current education: [This.GetChildEducation.GetName]"
+			select_best_child_education_trait_based = yes
+			log = "[ACE] Assigned [This.GetName] -> [This.GetChildEducation.GetName]"
+			owner = {
+				change_variable = { name = ace_run_count add = 1 }
+			}
+		}
+		
+		# Also check dynasty members
+		if = {
+			limit = { has_ruler = yes }
+			ruler = {
+				if = {
+					limit = { has_dynasty = yes }
+					dynasty = {
+						every_character_in_dynasty = {
+							limit = {
+								owner = root
+								ace_should_auto_educate_child = yes
+							}
+							log = "[ACE] Processing dynasty child [This.GetName] - current: [This.GetChildEducation.GetName]"
+							select_best_child_education_trait_based = yes
+							log = "[ACE] Assigned dynasty child [This.GetName] -> [This.GetChildEducation.GetName]"
+							owner = {
+								change_variable = { name = ace_run_count add = 1 }
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		# Log completion
+		log = "[ACE] Completed. Processed [This.Var('ace_run_count').GetValue] children."
+	}
+}

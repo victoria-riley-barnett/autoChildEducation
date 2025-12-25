@@ -1,0 +1,13 @@
+﻿l_english:
+ # Auto Child Education - Settings Panel
+ ACE_SETTINGS_HEADER: "Auto Education"
+ ACE_SKIP_HEIRS: "Heirs"
+ ACE_SKIP_HEIRS_TT: "Skip heirs - let player manage manually"
+ ACE_SKIP_CROWN: "Crown Estate"
+ ACE_SKIP_CROWN_TT: "Skip crown estate children"
+ ACE_SKIP_PRODIGY: "Prodigy/Gifted"
+ ACE_SKIP_PRODIGY_TT: "Skip prodigies and gifted - they cap stats regardless"
+ ACE_EXCLUDE: "Exclude:"
+ ACE_RUN_NOW: "Run Now"
+ ACE_RUN_NOW_TT: "Immediately process all eligible children. Check game.log for results."
+ ACE_RUN_NOW_HINT: "(check game.log for results)"

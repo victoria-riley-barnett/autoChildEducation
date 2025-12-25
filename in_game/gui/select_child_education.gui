@@ -1,0 +1,217 @@
+﻿lateralview = {
+	name = "select_child_education"
+
+	blockoverride "panel_header" {
+		window_header_alt = {
+			blockoverride "header_text" {
+				text = "SELECT_EDUCATION"
+			}
+		}
+	}
+
+	blockoverride "panel_content" {
+		vbox = {
+			using = layoutpolicy_expanding
+			using = bg_main_inner_notabs_alt
+			using = window_main_tabs_margin_alt
+
+			vbox = {
+				using = layoutpolicy_expanding
+				using = bg_secondary_inner_notabs_alt
+
+				scrollarea = {
+					using = layoutpolicy_expanding
+					scrollbarpolicy_horizontal = always_off
+
+					scrollbar_vertical = {
+						using = Scrollbar_Vertical
+					}
+
+					scrollwidget = {
+						vbox = {
+							layoutpolicy_horizontal = expanding
+							
+							vbox = {
+								layoutpolicy_horizontal = expanding
+								datamodel = "[SelectChildEducation.GetCandidates]"
+								spacing = 10
+								margin = { 5 5 }
+
+								item = {
+									clickable_header_card = {
+										blockoverride "layout_setup" {
+											using = flexible_interaction_target_entry_setup
+										}
+
+										blockoverride "header_color" {
+											using = color_white_texture
+
+											modify_texture = {
+												visible = "[ChildEducationCandidate.IsAlreadySelected]"
+												using = color_dark_green_texture
+												blend_mode = multiply
+											}
+
+											modify_texture = {
+												visible = "[Not(ChildEducationCandidate.IsAlreadySelected)]"
+												using = color_mid_green_texture
+												blend_mode = multiply
+											}
+										}
+
+										blockoverride "header_content" {
+											size = { 100% 100% }
+											margin = { 20 0 }
+											align = left|nobaseline
+
+											text = "[ChildEducationCandidate.GetChildEducation.GetNameWithNoTooltip]"
+											onclick = "[ChildEducationCandidate.Select]"
+											enabled = "[ChildEducationCandidate.CanSelect]"
+											tooltipwidget = {
+												ContextualTooltipType = {
+													blockoverride "title_text" {
+														text = "[ChildEducationCandidate.GetChildEducation.GetNameWithNoTooltip]"
+													}
+													blockoverride "title_icon" {
+														icon = {
+															using = tooltip_title_icon_size
+															texture = "gfx/interface/icons/modifier_types/education_hat.dds"
+
+														}
+													}
+							
+													blockoverride "concept_link" {
+														text = "[child_education|e]"
+													}
+													blockoverride "tooltip_content" {
+														TooltipTextBlock = {
+															blockoverride "text" {
+																text = "[ChildEducationCandidate.GetWhy]"
+															}
+														}
+													}
+												}
+											}
+										}
+
+										blockoverride "bottom_content" {
+											vbox = {
+												set_parent_size_to_minimum = yes
+												spacing = 5
+												margin = { 5 5 }
+
+												minimumsize = { 468 -1 }
+												maximumsize = { 468 -1 }
+
+												card_stringpair_list = {
+													visible = "[Not(StringIsEmpty(ChildEducationCandidate.GetChildEducation.GetEffect))]"
+													textcontext =  "[ChildEducationCandidate.GetChildEducation.GetEffect]"
+													blockoverride "field_highlight" {}
+												}
+
+												card_stringpair_list = {
+													visible = "[Not(StringIsEmpty(ChildEducationCandidate.GetChildEducation.GetImpactForTheCountry))]"
+													textcontext =  "[ChildEducationCandidate.GetChildEducation.GetImpactForTheCountry]"
+
+													blockoverride "block_title" {
+														text = "IMPACT_FOR_COUNTRY"
+													}
+													blockoverride "field_highlight" {}
+												}
+											}
+
+											blockoverride "bg_color" { 
+												using = color_mid_green_texture
+											}
+										}
+									}
+								}
+							}
+
+							# === COMPACT AUTO EDUCATION SETTINGS ===
+							hbox = {
+								layoutpolicy_horizontal = expanding
+								margin = { 10 8 }
+								spacing = 8
+
+								text_single = {
+									text = "ACE_SETTINGS_HEADER"
+									fontsize = 12
+									default_format = "#T"
+								}
+
+								text_single = {
+									text = "ACE_EXCLUDE"
+									fontsize = 11
+								}
+
+								# Heirs checkbox
+								button_checkbox = {
+									size = { 18 18 }
+									checked = "[Player.MakeScope.GetVariable('ace_skip_heirs').IsSet]"
+									onclick = "[GetScriptedGui('ace_toggle_skip_heirs').Execute(GuiScope.SetRoot(Player.MakeScope).End)]"
+									tooltip = "ACE_SKIP_HEIRS_TT"
+								}
+								text_single = {
+									text = "ACE_SKIP_HEIRS"
+									fontsize = 11
+								}
+
+								# Crown Estate checkbox
+								button_checkbox = {
+									size = { 18 18 }
+									checked = "[Player.MakeScope.GetVariable('ace_skip_crown').IsSet]"
+									onclick = "[GetScriptedGui('ace_toggle_skip_crown').Execute(GuiScope.SetRoot(Player.MakeScope).End)]"
+									tooltip = "ACE_SKIP_CROWN_TT"
+								}
+								text_single = {
+									text = "ACE_SKIP_CROWN"
+									fontsize = 11
+								}
+
+								# Prodigy/Gifted checkbox
+								button_checkbox = {
+									size = { 18 18 }
+									checked = "[Player.MakeScope.GetVariable('ace_skip_prodigy').IsSet]"
+									onclick = "[GetScriptedGui('ace_toggle_skip_prodigy').Execute(GuiScope.SetRoot(Player.MakeScope).End)]"
+									tooltip = "ACE_SKIP_PRODIGY_TT"
+								}
+								text_single = {
+									text = "ACE_SKIP_PRODIGY"
+									fontsize = 11
+								}
+
+								expand = {}
+							}
+
+							# === RUN NOW BUTTON ROW ===
+							hbox = {
+								layoutpolicy_horizontal = expanding
+								margin = { 10 4 }
+								spacing = 8
+
+								button_regular = {
+									size = { 100 26 }
+									raw_text = "Run Now"
+									fontsize = 12
+									onclick = "[GetScriptedGui('ace_run_now').Execute(GuiScope.SetRoot(Player.MakeScope).End)]"
+									tooltip = "ACE_RUN_NOW_TT"
+								}
+
+								text_single = {
+									text = "ACE_RUN_NOW_HINT"
+									fontsize = 10
+									default_format = "#weak"
+								}
+
+								expand = {}
+							}
+
+							expand = {}
+						}
+					}
+				}
+			}
+		}
+	}
+}
