@@ -1,10 +1,32 @@
-﻿# Auto Child Education - Scripted Triggers
+﻿# Auto Child Education - Scripted Triggers v2.3
+# Monthly pulse with "processed" marker - only process children with revealed traits (age 3+)
+
+# Trigger to check if child has meaningful trait modifiers (revealed traits at age 3+)
+# This ensures we don't process children before their stats are set
+ace_has_child_trait = {
+	# Check if any base modifier is non-zero (indicating traits are revealed)
+	OR = {
+		# Administrative base > 0
+		modifier:character_adm_child_education > 0
+		# Diplomatic base > 0
+		modifier:character_dip_child_education > 0
+		# Military base > 0
+		modifier:character_mil_child_education > 0
+	}
+}
 
 # Helper trigger to check if a child should be auto-educated
 # Scope: character (the child)
 ace_should_auto_educate_child = {
-	# Must be a child (use is_child, not has_trait_category)
+	# Must be a child
 	is_child = yes
+	
+	# Must have child trait revealed (age 3+) - this is what select_best_child_education_trait_based uses
+	ace_has_child_trait = yes
+	
+	# Skip if we've already processed this child
+	NOT = { has_variable = ace_processed }
+	
 	# Never touch expensive education
 	NOT = { has_child_education = expensive_in_depth_education }
 	
@@ -19,7 +41,6 @@ ace_should_auto_educate_child = {
 	}
 	trigger_if = {
 		limit = { owner = { has_variable = ace_skip_prodigy } }
-		# Correct trait names: child_prodigy and child_gifted
 		NOT = { has_trait = child_prodigy }
 		NOT = { has_trait = child_gifted }
 	}

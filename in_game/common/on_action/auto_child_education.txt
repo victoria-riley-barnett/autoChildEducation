@@ -1,17 +1,17 @@
-﻿# Auto Child Education v2.1 - Yearly pulse + birth hook for better performance
-# Uses yearly_country_pulse instead of monthly for less overhead
-# Also hooks on_character_birth for immediate assignment to newborns
-# Fixed in v2.1: Use is_child trigger instead of has_trait_category, iterate via dynasty
+﻿# Auto Child Education v2.3 - Monthly pulse with "processed" marker
+# Only processes children with revealed traits (age 3+)
+# Children are marked once processed, so monthly checks get faster over time
+# No birth hook needed - traits aren't revealed until age 3
 
-yearly_country_pulse = {
+monthly_country_pulse = {
 	on_actions = {
 		delay = { days = 1 }
-		ace_yearly_check
+		ace_monthly_check
 	}
 }
 
-# Yearly check for all children (catches any that were missed or need updates)
-ace_yearly_check = {
+# Monthly check for unprocessed children only
+ace_monthly_check = {
 	effect = {
 		# Only run for human players who have auto-education enabled
 		if = {
@@ -19,14 +19,19 @@ ace_yearly_check = {
 				is_ai = no 
 				NOT = { has_variable = ace_disabled }
 			}
-			# First approach: iterate all characters owned by this country
+			# Check all characters owned by this country
 			every_character = {
 				limit = {
 					ace_should_auto_educate_child = yes
 				}
 				select_best_child_education_trait_based = yes
+				# Mark as processed only if they have revealed traits
+				if = {
+					limit = { ace_has_child_trait = yes }
+					set_variable = ace_processed
+				}
 			}
-			# Second approach: also check dynasty members (children shown as dynasty)
+			# Also check dynasty members (children shown as dynasty)
 			if = {
 				limit = { has_ruler = yes }
 				ruler = {
@@ -39,29 +44,14 @@ ace_yearly_check = {
 									ace_should_auto_educate_child = yes
 								}
 								select_best_child_education_trait_based = yes
+								# Mark as processed only if they have revealed traits
+								if = {
+									limit = { ace_has_child_trait = yes }
+									set_variable = ace_processed
+								}
 							}
 						}
 					}
-				}
-			}
-		}
-	}
-}
-
-# Hook into character birth - root = country, scope:character = newborn
-on_character_birth = {
-	effect = {
-		# Only for human players with auto-education enabled
-		if = {
-			limit = { 
-				is_ai = no 
-				NOT = { has_variable = ace_disabled }
-			}
-			scope:character = {
-				# Delay a bit for traits to be assigned
-				trigger_event = {
-					id = ace_internal.1
-					days = 30
 				}
 			}
 		}

@@ -58,11 +58,9 @@ ace_run_now = {
 		
 		# Process via every_character
 		every_character = {
-			limit = {
-				ace_should_auto_educate_child = yes
-			}
 			log = "[ACE] Processing [This.GetName] - current education: [This.GetChildEducation.GetName]"
 			select_best_child_education_trait_based = yes
+			set_variable = ace_processed
 			log = "[ACE] Assigned [This.GetName] -> [This.GetChildEducation.GetName]"
 			owner = {
 				change_variable = { name = ace_run_count add = 1 }
@@ -83,6 +81,7 @@ ace_run_now = {
 							}
 							log = "[ACE] Processing dynasty child [This.GetName] - current: [This.GetChildEducation.GetName]"
 							select_best_child_education_trait_based = yes
+							set_variable = ace_processed
 							log = "[ACE] Assigned dynasty child [This.GetName] -> [This.GetChildEducation.GetName]"
 							owner = {
 								change_variable = { name = ace_run_count add = 1 }

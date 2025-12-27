@@ -2,8 +2,8 @@
 # Version 2.0 - Rewritten for EU5 1.0.9+ compatibility
 
 # Main effect: assigns the optimal education based on the child's stat modifiers
-# Skips prodigy/gifted (they cap stats regardless), heirs (player should manage), 
-# and expensive education (never downgrade)
+# Never downgrades expensive education. Optional excludes (heirs, prodigy/gifted,
+# crown estate) are handled by settings toggles in ace_should_auto_educate_child.
 select_best_child_education_trait_based = {
 	# NEVER change expensive education once set
 	if = {
