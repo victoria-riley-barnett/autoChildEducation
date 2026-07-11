@@ -118,9 +118,19 @@
 													}
 													blockoverride "field_highlight" {}
 												}
+
+												card_stringpair_list = {
+													visible = "[Not(StringIsEmpty(ChildEducationCandidate.GetOnStartEffectTooltip))]"
+													textcontext =  "[ChildEducationCandidate.GetOnStartEffectTooltip]"
+
+													blockoverride "block_title" {
+														text = "CHILD_EDUCATION_ON_START_EFFECT"
+													}
+													blockoverride "field_highlight" {}
+												}
 											}
 
-											blockoverride "bg_color" { 
+											blockoverride "bg_color" {
 												using = color_mid_green_texture
 											}
 										}
@@ -178,6 +188,25 @@
 								}
 								text_single = {
 									text = "ACE_SKIP_PRODIGY"
+									fontsize = 11
+								}
+
+								expand = {}
+							}
+
+							hbox = {
+								layoutpolicy_horizontal = expanding
+								margin = { 10 4 }
+								spacing = 8
+
+								button_checkbox = {
+									size = { 18 18 }
+									checked = "[Player.MakeScope.GetVariable('ace_use_expensive').IsSet]"
+									onclick = "[GetScriptedGui('ace_toggle_use_expensive').Execute(GuiScope.SetRoot(Player.MakeScope).End)]"
+									tooltip = "ACE_USE_EXPENSIVE_TT"
+								}
+								text_single = {
+									text = "ACE_USE_EXPENSIVE"
 									fontsize = 11
 								}
 
