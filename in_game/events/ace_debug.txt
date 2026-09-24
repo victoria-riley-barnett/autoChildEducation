@@ -1,0 +1,129 @@
+﻿namespace = ace_debug
+
+ace_debug.1 = {
+	type = country_event
+	title = ace_debug.1.title
+	desc = ace_debug.1.desc
+	orphan = yes
+	trigger = { always = no }
+
+	immediate = {
+		ruler ?= {
+			if = {
+				limit = { is_female = no }
+				save_scope_as = father
+			}
+			else = {
+				save_scope_as = mother
+			}
+		}
+	}
+
+	option = {
+		name = ace_debug.1.a
+		if = {
+			limit = { exists = scope:father }
+			create_character = {
+				age = 5
+				female = no
+				father = scope:father
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		else = {
+			create_character = {
+				age = 5
+				female = no
+				mother = scope:mother
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		last_created_character = {
+			add_trait = trait:child_intelligent
+			move_country = root
+		}
+	}
+
+	option = {
+		name = ace_debug.1.b
+		if = {
+			limit = { exists = scope:father }
+			create_character = {
+				age = 5
+				female = yes
+				father = scope:father
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		else = {
+			create_character = {
+				age = 5
+				female = yes
+				mother = scope:mother
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		last_created_character = {
+			add_trait = trait:child_gregarious
+			move_country = root
+		}
+	}
+
+	option = {
+		name = ace_debug.1.c
+		if = {
+			limit = { exists = scope:father }
+			create_character = {
+				age = 5
+				female = no
+				father = scope:father
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		else = {
+			create_character = {
+				age = 5
+				female = no
+				mother = scope:mother
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		last_created_character = {
+			add_trait = trait:child_prodigy
+			move_country = root
+		}
+	}
+
+	option = {
+		name = ace_debug.1.d
+		if = {
+			limit = { exists = scope:father }
+			create_character = {
+				age = 5
+				female = no
+				father = scope:father
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		else = {
+			create_character = {
+				age = 5
+				female = no
+				mother = scope:mother
+				dynasty = root.ruler.dynasty
+				estate = estate_type:crown_estate
+			}
+		}
+		last_created_character = {
+			add_trait = trait:child_rowdy
+			move_country = root
+		}
+	}
+}

@@ -1,0 +1,51 @@
+[b]Stop-gap compatibility update for EU5 1.3.[/b] Will be removed once the original mod is updated by [url=https://steamcommunity.com/id/victoriaposting]victoriaposting[/url].
+
+Original mod: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3607293096]Auto Child Education[/url]
+
+[h2]Do NOT use both mods at the same time.[/h2] They define the same scripted triggers and effects: whichever loads last wins, making the result unpredictable. Unsubscribe, or manually unload in the game, from the original mod while using this one.
+
+[h1]Features[/h1]
+[list]
+[*]Compatible with Orthodox Education (Fate of the Phoenix DLC) -- will not override it if manually assigned
+[*][b]Expensive Education toggle[/b]: automatically assign expensive in-depth education to heirs and crown estate children
+[*][b]Debug event[/b]: use [i]event ace_debug.1[/i] in console to spawn test children
+[/list]
+
+[h1]How It Works[/h1]
+Every month, all children with revealed traits (age 3+) are evaluated by calculating their base aptitude modifiers and assigned to the education type matching their highest base modifier.
+
+[list]
+[*]Intelligent child (base adm +0.5) -> Administrative education
+[*]Gregarious child (base dip +0.5) -> Diplomatic education
+[*]Rowdy child (base mil +0.5) -> Military education
+[*]Ambitious child (base adm +0.33, dip +0.33) -> Administrative education
+[*]Gallant child (base dip +0.33, mil +0.33) -> Diplomatic education
+[*]Shrewd child (base adm +0.33, mil +0.33) -> Administrative education
+[*]Prodigy/gifted/slow/idiot -> rotated evenly across admin/diplo/mil
+[/list]
+
+[h1]Settings[/h1]
+Open any child's education selection screen to access the Auto Education panel:
+[list]
+[*][b]Exclude Heirs[/b]: skip heirs so you can assign them manually
+[*][b]Exclude Crown Estate[/b]: skip crown estate children
+[*][b]Exclude Prodigy/Gifted[/b]: skip prodigies and gifted (they cap stats regardless)
+[*][b]Expensive Education[/b]: automatically assign expensive in-depth education to heirs and crown estate children
+[*][b]Run Now[/b]: immediately re-processes all eligible children
+[/list]
+
+Expensive education is never overridden once set -- the mod only assigns it when the toggle is enabled, and only to heirs and crown estate children.
+
+[h1]Compatibility[/h1]
+[list]
+[*]EU5 1.3.x
+[*]Multiplayer synchronized
+[*]Safe to add mid-save (starts working within one month)
+[*]Only runs for human players, no AI overhead
+[/list]
+
+[h1]Source Code[/h1]
+[url=https://github.com/JustinRudisal/autoChildEducation]GitHub[/url]
+
+[h1]Credits[/h1]
+All credit to [url=https://steamcommunity.com/id/victoriaposting]victoriaposting[/url] for the original mod. This is fully their idea, and all I did was update it to get it working again.
