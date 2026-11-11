@@ -1,8 +1,8 @@
 # Auto Child Education
 
-Stop-gap update of [Auto Child Education](https://steamcommunity.com/sharedfiles/filedetails/?id=3607293096) by [victoriaposting](https://steamcommunity.com/id/victoriaposting) for EU5 1.3.x compatibility.
+Automatically assigns each child the education that matches their strongest aptitude modifier, so you never have to pick one by hand.
 
-All credit to victoriaposting for the original mod.
+A Europa Universalis V mod. Source of the [Steam Workshop release](https://steamcommunity.com/sharedfiles/filedetails/?id=3607293096), plus a [1.3.x compatibility listing](https://steamcommunity.com/sharedfiles/filedetails/?id=3681510822).
 
 ## How It Works
 
@@ -48,6 +48,5 @@ Open any child's education selection screen to find the Auto Education panel:
 
 ## Links
 
-- Workshop (this fork): https://steamcommunity.com/sharedfiles/filedetails/?id=3681510822
-- Workshop (original): https://steamcommunity.com/sharedfiles/filedetails/?id=3607293096
-- GitHub (original): https://github.com/victoria-riley-barnett/autoChildEducation
+- Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3607293096
+- 1.3.x compatibility listing: https://steamcommunity.com/sharedfiles/filedetails/?id=3681510822
